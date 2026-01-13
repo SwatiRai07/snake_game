@@ -1,2 +1,2 @@
-# snake_game
+# SnakeGame
 my first game app 
