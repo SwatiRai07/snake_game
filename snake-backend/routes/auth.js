@@ -15,6 +15,9 @@ const isValidEmail = (email) => {
 // =======================
 router.post("/send-otp", async (req, res) => {
   try {
+    console.log("🔥 SEND OTP HIT");
+    console.log("BODY:", req.body);
+
     const { value } = req.body;
 
     if (!value || !isValidEmail(value)) {
@@ -30,8 +33,10 @@ router.post("/send-otp", async (req, res) => {
     await user.save();
 
     await sendEmail(value, otp);
+
     res.json({ message: "OTP sent" });
-  } catch {
+  } catch (err) {
+    console.log("❌ OTP SEND ERROR:", err);
     res.status(500).json({ message: "OTP send failed" });
   }
 });
@@ -69,8 +74,7 @@ router.post("/profile", async (req, res) => {
     }
 
     const birthDate = new Date(dob);
-    const age =
-      new Date(Date.now() - birthDate).getUTCFullYear() - 1970;
+    const age = new Date(Date.now() - birthDate).getUTCFullYear() - 1970;
 
     if (age < 10 || age > 100) {
       return res
@@ -103,7 +107,6 @@ router.post("/profile", async (req, res) => {
   }
 });
 
-module.exports = router;
 // =======================
 // 📥 GET PROFILE
 // =======================
@@ -116,7 +119,7 @@ router.get("/profile/:email", async (req, res) => {
     res.json({
       username: user.username,
       avatar: user.avatar,
-      bestScore: user.bestScore
+      bestScore: user.bestScore,
     });
   } catch (err) {
     console.error("GET PROFILE ERROR:", err);
@@ -124,3 +127,4 @@ router.get("/profile/:email", async (req, res) => {
   }
 });
 
+module.exports = router;
