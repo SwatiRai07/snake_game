@@ -26,7 +26,7 @@ export default function Login({ onNext }) {
       setLoading(true);
       setMessage("");
 
-      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const res = await fetch("https://snake-game25.onrender.com/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ value: email }),
