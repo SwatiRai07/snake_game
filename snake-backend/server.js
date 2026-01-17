@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path"); // ✅ ADD
 
 const app = express();
 
@@ -21,9 +22,11 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // ROUTES
 app.use("/api/auth", require("./routes/auth"));
 
-// TEST ROUTE
-app.get("/", (req, res) => {
-  res.send("🐍 Snake Backend Running");
+// 🔥 FRONTEND SERVE (ADDED ONLY)
+app.use(express.static(path.join(__dirname, "../build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
 
 // DB CONNECT
