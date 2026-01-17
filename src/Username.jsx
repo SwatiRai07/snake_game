@@ -10,7 +10,7 @@ export default function Username({ userId, onDone }) {
       return;
     }
 
-    const res = await fetch("http://localhost:5000/api/auth/set-username", {
+    const res = await fetch("https://snake-game25.onrender.com/api/auth/set-username", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, username }),
