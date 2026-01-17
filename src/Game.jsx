@@ -91,7 +91,7 @@ export default function Game({ onEditProfile }) {
     const email = localStorage.getItem("userEmail");
     if (!email) return;
 
-    fetch(`http://localhost:5000/api/auth/profile/${email}`)
+    fetch(`https://snake-game25.onrender.com/api/auth/profile/${email}`)
       .then(res => res.json())
       .then(data => {
         if (data.avatar) setAvatar(data.avatar);
@@ -418,7 +418,9 @@ export default function Game({ onEditProfile }) {
       )}
 
       {/* 🎆 CRACKER CANVAS */}
-      {celebrate && <canvas id="crackerCanvas" className="cracker-canvas"></canvas>}
+      {celebrate && (
+        <canvas id="crackerCanvas" className="cracker-canvas"></canvas>
+      )}
     </div>
   );
 }

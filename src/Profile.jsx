@@ -80,7 +80,7 @@ export default function Profile({ onComplete, editMode = false, onBack }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/profile", {
+      const res = await fetch("https://snake-game25.onrender.com/api/auth/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -14,16 +14,19 @@ export default function OTP({ onVerify, userValue, onBack }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          value: userValue,
-          otp: otp,
-        }),
-      });
+      const res = await fetch(
+        "https://snake-game25.onrender.com/api/auth/verify-otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            value: userValue,
+            otp: otp,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -39,7 +42,7 @@ export default function OTP({ onVerify, userValue, onBack }) {
       // 🔥 ADD ONLY THIS (FOR OLD USER)
       if (data.hasProfile) {
         const profileRes = await fetch(
-          `http://localhost:5000/api/auth/profile/${userValue}`
+          `https://snake-game25.onrender.com/api/auth/profile/${userValue}`
         );
 
         const profileData = await profileRes.json();
@@ -56,7 +59,6 @@ export default function OTP({ onVerify, userValue, onBack }) {
 
       // 👉 go to game / profile logic
       onVerify(data.hasProfile);
-
     } catch (err) {
       setMessage("❌ OTP verification failed");
     }
@@ -68,15 +70,18 @@ export default function OTP({ onVerify, userValue, onBack }) {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          value: userValue,
-        }),
-      });
+      const res = await fetch(
+        "https://snake-game25.onrender.com/api/auth/send-otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            value: userValue,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -118,11 +123,7 @@ export default function OTP({ onVerify, userValue, onBack }) {
       <button onClick={verifyOtp}>Verify OTP</button>
 
       {/* 🔁 RESEND OTP */}
-      <button
-        className="resend-btn"
-        onClick={resendOtp}
-        disabled={resending}
-      >
+      <button className="resend-btn" onClick={resendOtp} disabled={resending}>
         {resending ? "Resending..." : "Resend OTP"}
       </button>
     </div>
