@@ -7,6 +7,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
@@ -35,17 +36,21 @@ app.get("/api/health", (req, res) => {
 
 // -----------------------------
 // FRONTEND SERVE (React build)
+// Only serve if build folder exists (prevents Render crash)
 // -----------------------------
 const __dirnameResolved = path.resolve();
+const buildPath = path.join(__dirnameResolved, "build");
 
-// Serve static files from React build
-// ✅ Notice "../build" changed to "./build" for backend folder
-app.use(express.static(path.join(__dirnameResolved, "build")));
+if (fs.existsSync(buildPath)) {
+  app.use(express.static(buildPath));
 
-// Express v5 safe wildcard to serve React
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirnameResolved, "build", "index.html"));
-});
+  // Serve React for all non-api routes
+  app.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+} else {
+  console.log("⚠️ React build folder not found. Skipping frontend serving.");
+}
 
 // -----------------------------
 // DATABASE (MongoDB Atlas)
