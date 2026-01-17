@@ -1,2 +1,3 @@
 # SnakeGame
-my first game app 
+A React-based Snake Game with login and OTP system
+
