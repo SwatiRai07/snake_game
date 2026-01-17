@@ -60,7 +60,7 @@ export default function OTP({ onVerify, userValue, onBack }) {
       // 👉 go to game / profile logic
       onVerify(data.hasProfile);
     } catch (err) {
-      setMessage("❌ OTP verification failed");
+      setMessage("❌ OTP verification failed: " + err.message);
     }
   };
 
@@ -91,7 +91,7 @@ export default function OTP({ onVerify, userValue, onBack }) {
         setMessage("✅ New OTP sent to your email");
       }
     } catch (err) {
-      setMessage("❌ Failed to resend OTP");
+      setMessage("❌ Failed to resend OTP: " + err.message);
     } finally {
       setResending(false);
     }
