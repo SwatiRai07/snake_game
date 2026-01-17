@@ -25,8 +25,6 @@ router.post("/send-otp", async (req, res) => {
     }
 
     const otp = generateOTP();
-
-    // ✅ ADD: OTP LOG (Render me OTP dikh jayega)
     console.log("✅ OTP for", value, "is:", otp);
 
     let user = await User.findOne({ email: value });
@@ -36,11 +34,13 @@ router.post("/send-otp", async (req, res) => {
     user.otpExpires = Date.now() + 5 * 60 * 1000;
     await user.save();
 
-    // ✅ UPDATE: Email fail ho to bhi crash na ho
+    // ✅ EMAIL FAIL HO TO BHI OTP WORK KARE
     try {
       await sendEmail(value, otp);
-    } catch (err) {
-      console.log("⚠️ EMAIL FAILED BUT OTP SAVED IN DB");
+      console.log("📧 EMAIL SENT SUCCESSFULLY");
+    } catch (emailErr) {
+      console.log("⚠️ EMAIL FAILED BUT OTP SAVED");
+      console.log("EMAIL ERROR:", emailErr.message);
     }
 
     res.json({ message: "OTP sent" });
