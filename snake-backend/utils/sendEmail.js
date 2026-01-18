@@ -3,9 +3,9 @@ const nodemailer = require("nodemailer");
 const sendEmail = async (to, otp) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtp-relay.brevo.com",
       port: 587,
-      secure: false, // 587 TLS
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -13,7 +13,7 @@ const sendEmail = async (to, otp) => {
     });
 
     await transporter.sendMail({
-      from: `"Snake Game" <${process.env.EMAIL_USER}>`,
+      from: `"Snake Game" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
       to,
       subject: "Snake Game OTP",
       text: `Your OTP is ${otp}. Valid for 5 minutes.`,
