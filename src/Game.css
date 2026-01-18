@@ -368,7 +368,7 @@ html, body {
 .controls button {
   margin-top: 3px;
   min-width: 110px;
-  min-height: 36px;
+  min-height: 43px;
   font-size: 14px;
   background: linear-gradient(135deg, #96e2ef, #9d4edd);
   color: white;
