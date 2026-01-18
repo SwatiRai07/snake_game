@@ -6,6 +6,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
@@ -18,7 +20,7 @@ console.log("PASS LENGTH:", process.env.EMAIL_PASS?.length);
 // -----------------------------
 app.use(
   cors({
-    origin: "https://snake-game4.onrender.com",
+    origin: ["https://snake-game4.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -38,10 +40,23 @@ app.get("/api/health", (req, res) => {
   res.send("🐍 Snake Backend Running");
 });
 
-// Basic root route (so Render doesn't look for build/index.html)
-app.get("/", (req, res) => {
-  res.send("✅ Snake Backend is running");
-});
+// -----------------------------
+// FRONTEND SERVE (React build)
+// Only serve if build folder exists (prevents Render crash)
+// -----------------------------
+const __dirnameResolved = path.resolve();
+const buildPath = path.join(__dirnameResolved, "build");
+
+if (fs.existsSync(buildPath)) {
+  app.use(express.static(buildPath));
+
+  // Serve React for all non-api routes
+  app.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+} else {
+  console.log("⚠️ React build folder not found. Skipping frontend serving.");
+}
 
 // -----------------------------
 // DATABASE (MongoDB Atlas)
