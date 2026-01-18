@@ -1,30 +1,38 @@
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const sendEmail = async (to, otp) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+    const apiKey = process.env.BREVO_API_KEY;
 
-    await transporter.sendMail({
-      from: `Snake Game <${process.env.EMAIL_FROM}>`,
-      to,
-      subject: "Snake Game OTP",
-      text: `Your OTP is ${otp}. Valid for 5 minutes.`,
-    });
+    if (!apiKey) {
+      throw new Error("BREVO_API_KEY missing in environment variables");
+    }
+
+    const fromEmail = process.env.EMAIL_FROM || "snakegameotp@gmail.com";
+
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: { email: fromEmail, name: "Snake Game" },
+        to: [{ email: to }],
+        subject: "Snake Game OTP",
+        textContent: `Your OTP is ${otp}. Valid for 5 minutes.`,
+      },
+      {
+        headers: {
+          "api-key": apiKey,
+          "Content-Type": "application/json",
+          accept: "application/json",
+        },
+      }
+    );
 
     console.log("📧 OTP email sent to:", to);
   } catch (error) {
-    console.error("❌ Email Error:", error);
+    console.error(
+      "❌ Email Error:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
