@@ -16,7 +16,13 @@ console.log("PASS LENGTH:", process.env.EMAIL_PASS?.length);
 // -----------------------------
 // MIDDLEWARES
 // -----------------------------
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://snake-game4.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // Body parser - increase size for images / avatars
 app.use(express.json({ limit: "10mb" }));
