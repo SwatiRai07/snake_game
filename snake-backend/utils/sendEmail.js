@@ -10,10 +10,13 @@ const sendEmail = async (to, otp) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
 
     await transporter.sendMail({
-      from: `"Snake Game" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
+      from: `Snake Game <${process.env.EMAIL_FROM}>`,
       to,
       subject: "Snake Game OTP",
       text: `Your OTP is ${otp}. Valid for 5 minutes.`,
