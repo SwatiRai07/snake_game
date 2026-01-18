@@ -26,11 +26,14 @@ export default function Login({ onNext }) {
       setLoading(true);
       setMessage("");
 
-      const res = await fetch("https://snake-game25.onrender.com/api/auth/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ value: email }),
-      });
+      const res = await fetch(
+        "https://snake-game25.onrender.com/api/auth/send-otp",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ value: email }),
+        }
+      );
 
       const data = await res.json();
 
@@ -39,9 +42,13 @@ export default function Login({ onNext }) {
         return;
       }
 
+      // ✅ SHOW DEMO OTP (ONLY IF BACKEND RETURNS OTP)
+      if (data.otp) {
+        setMessage("✅ DEMO OTP: " + data.otp);
+      }
+
       // ✅ DIRECT OTP SCREEN (NO ALERT)
       onNext(email);
-
     } catch (err) {
       setMessage("❌ Server error");
     } finally {
