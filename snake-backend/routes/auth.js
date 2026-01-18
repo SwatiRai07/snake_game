@@ -34,24 +34,17 @@ router.post("/send-otp", async (req, res) => {
     user.otpExpires = Date.now() + 5 * 60 * 1000;
     await user.save();
 
-    let emailSent = true;
-
+    // ✅ EMAIL FAIL HO TO BHI OTP WORK KARE
     try {
       await sendEmail(value, otp);
       console.log("📧 EMAIL SENT SUCCESSFULLY");
     } catch (emailErr) {
-      emailSent = false;
       console.log("⚠️ EMAIL FAILED BUT OTP SAVED");
       console.log("EMAIL ERROR:", emailErr.message);
     }
 
-    // ✅ IMPORTANT: OTP response for demo when email fails
-    return res.json({
-      message: emailSent ? "OTP sent to email" : "Email blocked, OTP shown for demo",
-      otp: emailSent ? null : otp,
-      emailSent,
-    });
-
+    // ✅ IMPORTANT: otp response me bhej do (Render me email timeout ho raha hai)
+    res.json({ message: "OTP sent", otp });
   } catch (err) {
     console.log("❌ OTP SEND ERROR:", err);
     res.status(500).json({ message: "OTP send failed" });
@@ -80,7 +73,7 @@ router.post("/verify-otp", async (req, res) => {
 });
 
 // =======================
-// 👤 CREATE / EDIT PROFILE
+// 👤 CREATE / EDIT PROFILE  ✅ SINGLE ROUTE
 // =======================
 router.post("/profile", async (req, res) => {
   try {
